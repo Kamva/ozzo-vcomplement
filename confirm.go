@@ -28,11 +28,14 @@ func (r ConfirmRule) Validate(value interface{}) error {
 		return nil
 	}
 
-	if reflect.DeepEqual(r.realValue, value) {
-		return nil
+	realVal,isNil:=validation.Indirect(r.realValue)
+
+
+	if isNil || !reflect.DeepEqual(realVal, value) {
+		return r.err
 	}
 
-	return r.err
+	return nil
 }
 
 // Error sets the error message for the rule.

@@ -15,6 +15,15 @@ func TestConfirm(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestConfirmRealValuePointer(t *testing.T) {
+	expected := "abc"
+	val := "abc"
+
+	err := validation.Validate(&val, Confirm(&expected))
+
+	assert.Nil(t, err)
+}
+
 func TestConfirmError(t *testing.T) {
 	expected := "123"
 	val := "abc"
