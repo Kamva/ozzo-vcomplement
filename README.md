@@ -7,6 +7,6 @@ for the [ozzo-validation](https://github.com/go-ozzo/ozzo-validation) package.
     - translation_key: `validation_ir_phone_invalid`   
 
 #### Todo:
-- [ ] Write Tests
+- [x] Write Tests
 - [ ] Add badges to readme.
 - [ ] CI 
