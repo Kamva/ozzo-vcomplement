@@ -1,4 +1,4 @@
-package vr
+package vcomplement
 
 import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
