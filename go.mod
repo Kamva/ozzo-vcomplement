@@ -1,4 +1,4 @@
-module github.com/Kamva/vr
+module github.com/Kamva/validation-rules
 
 go 1.13
 
