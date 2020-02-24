@@ -9,7 +9,11 @@ import (
 type (
 	// Translator is the ozzo-validation error translator.
 	Translator interface {
+		// Translate translate validation error. if validation don't have
+		//any error, so this function should return (nil,nil).
 		Translate(err error) (*TranslateBag, error)
+
+		// Wrap translated messages in a kitty Error.
 		WrapTranslationByError(err error) kitty.Error
 	}
 
@@ -24,9 +28,9 @@ type kittyTranslator struct {
 	t kitty.Translator
 }
 
-// NewKittyErrorTranslator returns new instance of kittyTranslator
+// NewKittyDriverErrorTranslator returns new instance of kittyTranslator
 //that translate ozzo-validation errors.
-func NewKittyErrorTranslator(t kitty.Translator) Translator {
+func NewKittyDriverErrorTranslator(t kitty.Translator) Translator {
 	return &kittyTranslator{t: t}
 }
 
@@ -35,6 +39,11 @@ func (t *kittyTranslator) translateErr(err validation.Error) (string, error) {
 }
 
 func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
+
+	if err == nil {
+		return nil, nil
+	}
+
 	bag := new(TranslateBag)
 
 	if e, ok := err.(validation.Error); ok {
@@ -53,6 +62,8 @@ func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
 
 			bag.AddMsgToGroup(k, errBag)
 		}
+
+		return bag,nil
 	}
 
 	// otherwise return just simple error.

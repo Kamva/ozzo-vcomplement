@@ -1,0 +1,10 @@
+[validation_min_greater_equal_than_required]
+description = "The number of cats a person has"
+one = "abc_min"
+other = "abc_min"
+
+[validation_is_alpha]
+description = "The number of cats a person has"
+other = "abc_alpha"
+
+
