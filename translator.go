@@ -9,11 +9,10 @@ import (
 type (
 	// Translator is the ozzo-validation error translator.
 	Translator interface {
-		// Translate translate validation error. if validation don't have
-		//any error, so this function should return (nil,nil).
+		// Translate translate validation error.
 		Translate(err error) (*TranslateBag, error)
 
-		// Wrap translated messages in a kitty Error.
+		// Wrap translated messages in a kitty Error, if err is nil, return nil.
 		WrapTranslationByError(err error) kitty.Error
 	}
 
@@ -39,11 +38,6 @@ func (t *kittyTranslator) translateErr(err validation.Error) (string, error) {
 }
 
 func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
-
-	if err == nil {
-		return nil, nil
-	}
-
 	bag := new(TranslateBag)
 
 	if e, ok := err.(validation.Error); ok {
@@ -63,18 +57,27 @@ func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
 			bag.AddMsgToGroup(k, errBag)
 		}
 
-		return bag,nil
+		return bag, nil
 	}
 
-	// otherwise return just simple error.
-	return nil, err
+	// otherwise return just empty bag and error (if error is internal
+	// error, so user can detect it, otherwise get empty bag that to
+	// detect that validation does not have any error).
+	return bag, err
 }
 
+// Wrap bag translated error messages to kitty Error.
+// if bag be empty, returns nil.
 func (t *kittyTranslator) WrapTranslationByError(err error) kitty.Error {
 	bag, err := t.Translate(err)
 
 	if err != nil {
 		return ErrInternalValidation.SetError(err.Error())
+	}
+
+	// Bag can be nil (in case of valid data)
+	if bag.IsEmpty() {
+		return nil
 	}
 
 	return ErrValidationError.SetData(bag.Map(true).(map[string]interface{}))
@@ -92,6 +95,11 @@ func (t *TranslateBag) AddMsgToGroup(key string, msg *TranslateBag) {
 	}
 
 	t.groupMessages[key] = msg
+}
+
+// IsEmpty specify that error bag is empty or not.
+func (t *TranslateBag) IsEmpty() bool {
+	return t.singleMessage == "" && len(t.groupMessages) == 0
 }
 
 // TOMap fucntion convert TranslateBag to a map[string]interface{}.
@@ -118,7 +126,7 @@ func (t *TranslateBag) Map(forceMap bool) interface{} {
 		messages[k] = v.Map(false)
 	}
 
-	return nil
+	return messages
 }
 
 // Assert kittyTranslator implements the Translator.
