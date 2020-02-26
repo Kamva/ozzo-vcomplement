@@ -6,7 +6,7 @@ import (
 )
 
 // ErrInvalidConfirmation is the error that returns in case of invalid confirmation value.
-var ErrInvalidConfirmation = validation.NewError("validation_invalid_confirmation", "Confirmation value is invalid.")
+var ErrInvalidConfirmation = validation.NewError("validation_invalid_confirmation", "confirmation value is invalid")
 
 func Confirm(value interface{}) ConfirmRule {
 	return ConfirmRule{
