@@ -3,6 +3,7 @@ package vcomplement
 import (
 	"github.com/Kamva/gutil"
 	"github.com/Kamva/kitty"
+	"github.com/Kamva/tracer"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
@@ -34,7 +35,8 @@ func NewKittyDriverErrorTranslator(t kitty.Translator) Translator {
 }
 
 func (t *kittyTranslator) translateErr(err validation.Error) (string, error) {
-	return t.t.TranslateDefault(err.Code(), err.Message(), gutil.MapToKeyValue(err.Params())...)
+	val, err := t.t.TranslateDefault(err.Code(), err.Message(), gutil.MapToKeyValue(err.Params())...)
+	return val, tracer.Trace(err)
 }
 
 func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
@@ -43,7 +45,7 @@ func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
 	if e, ok := err.(validation.Error); ok {
 		msg, err := t.translateErr(e)
 		bag.SetSingleMsg(msg)
-		return bag, err
+		return bag, tracer.Trace(err)
 	}
 
 	if es, ok := err.(validation.Errors); ok {
@@ -51,7 +53,7 @@ func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
 			errBag, err := t.Translate(e)
 
 			if err != nil {
-				return nil, err
+				return nil, tracer.Trace(err)
 			}
 
 			bag.AddMsgToGroup(k, errBag)
@@ -72,7 +74,7 @@ func (t *kittyTranslator) WrapTranslationByError(err error) kitty.Error {
 	bag, err := t.Translate(err)
 
 	if err != nil {
-		return ErrInternalValidation.SetError(err)
+		return ErrInternalValidation.SetError(tracer.Trace(err))
 	}
 
 	// Bag can be nil (in case of valid data)
@@ -131,12 +133,12 @@ func (t *TranslateBag) Map(forceMap bool) interface{} {
 
 // TValidate get a translator and validatable interface, validate and return kitty error.
 func TValidate(t Translator, v validation.Validatable) error {
-	return t.WrapTranslationByError(v.Validate())
+	return tracer.Trace(t.WrapTranslationByError(v.Validate()))
 }
 
 // TValidateBy validate by provided translator and check to detect right driver.
 func TValidateByKitty(t kitty.Translator, v validation.Validatable) error {
-	return TValidate(NewKittyDriverErrorTranslator(t.(kitty.Translator)), v)
+	return tracer.Trace(TValidate(NewKittyDriverErrorTranslator(t.(kitty.Translator)), v))
 }
 
 // Assert kittyTranslator implements the Translator.
