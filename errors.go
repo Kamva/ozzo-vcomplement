@@ -1,6 +1,7 @@
 package vcomplement
 
 import (
+	"errors"
 	"github.com/Kamva/kitty"
 	"net/http"
 )
@@ -17,8 +18,8 @@ import (
 
 var (
 	ErrInternalValidation = kitty.NewError(http.StatusInternalServerError, "ozvc.1.e.0",
-		kitty.ReplyErrKeyInternalError, "internal error")
+		kitty.ErrKeyInternalError, errors.New("internal error"))
 
 	ErrValidationError = kitty.NewError(http.StatusBadRequest, "ozvc.1.e.1",
-		"invalid_input_data", "invalid input data")
+		"invalid_input_data", errors.New("invalid input data"))
 )

@@ -72,7 +72,7 @@ func (t *kittyTranslator) WrapTranslationByError(err error) kitty.Error {
 	bag, err := t.Translate(err)
 
 	if err != nil {
-		return ErrInternalValidation.SetInternalMessage(err.Error())
+		return ErrInternalValidation.SetError(err)
 	}
 
 	// Bag can be nil (in case of valid data)
