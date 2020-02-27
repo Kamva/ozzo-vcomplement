@@ -35,20 +35,20 @@ func NewKittyDriverErrorTranslator(t kitty.Translator) Translator {
 }
 
 func (t *kittyTranslator) translateErr(err validation.Error) (string, error) {
-	val, err := t.t.TranslateDefault(err.Code(), err.Message(), gutil.MapToKeyValue(err.Params())...)
-	return val, tracer.Trace(err)
+	val, e := t.t.TranslateDefault(err.Code(), err.Message(), gutil.MapToKeyValue(err.Params())...)
+	return val, tracer.Trace(e)
 }
 
 func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
 	bag := new(TranslateBag)
 
-	if e, ok := err.(validation.Error); ok {
+	if e, ok := tracer.Cause(err).(validation.Error); ok {
 		msg, err := t.translateErr(e)
 		bag.SetSingleMsg(msg)
 		return bag, tracer.Trace(err)
 	}
 
-	if es, ok := err.(validation.Errors); ok {
+	if es, ok := tracer.Cause(err).(validation.Errors); ok {
 		for k, e := range es {
 			errBag, err := t.Translate(e)
 
@@ -138,7 +138,7 @@ func TValidate(t Translator, v validation.Validatable) error {
 
 // TValidateBy validate by provided translator and check to detect right driver.
 func TValidateByKitty(t kitty.Translator, v validation.Validatable) error {
-	return tracer.Trace(TValidate(NewKittyDriverErrorTranslator(t.(kitty.Translator)), v))
+	return TValidate(NewKittyDriverErrorTranslator(t.(kitty.Translator)), v)
 }
 
 // Assert kittyTranslator implements the Translator.

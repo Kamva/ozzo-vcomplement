@@ -31,7 +31,7 @@ func (r ConfirmRule) Validate(value interface{}) error {
 	realVal,isNil:=validation.Indirect(r.realValue)
 
 
-	if isNil || !reflect.DeepEqual(realVal, value) {
+	if isNil || !reflect.DeepEqual(realVal, value)  {
 		return r.err
 	}
 
