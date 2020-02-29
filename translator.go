@@ -132,13 +132,23 @@ func (t *TranslateBag) Map(forceMap bool) interface{} {
 }
 
 // TValidate get a translator and validatable interface, validate and return kitty error.
+func TValidateErr(t Translator, err error) error {
+	return t.WrapTranslationByError(err)
+}
+
+// TValidate get a translator and validatable interface, validate and return kitty error.
 func TValidate(t Translator, v validation.Validatable) error {
-	return t.WrapTranslationByError(v.Validate())
+	return TValidateErr(t, v.Validate())
 }
 
 // TValidateBy validate by provided translator and check to detect right driver.
 func TValidateByKitty(t kitty.Translator, v validation.Validatable) error {
 	return TValidate(NewKittyDriverErrorTranslator(t.(kitty.Translator)), v)
+}
+
+// TValidateBy validate by provided translator and check to detect right driver.
+func TranslateByKitty(t kitty.Translator, err error) error {
+	return TValidateErr(NewKittyDriverErrorTranslator(t.(kitty.Translator)), err)
 }
 
 // Assert kittyTranslator implements the Translator.
