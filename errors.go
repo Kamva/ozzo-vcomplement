@@ -17,9 +17,9 @@ import (
 // 00 = error number zero (id of code in that part and type)
 
 var (
-	ErrInternalValidation = kitty.NewError(http.StatusInternalServerError, "ozvc.1.e.0",
+	ErrInternalValidation = kitty.NewError(http.StatusInternalServerError, "ozvc.tr.e.0",
 		kitty.ErrKeyInternalError, errors.New("internal error"))
 
-	ErrValidationError = kitty.NewError(http.StatusBadRequest, "ozvc.1.e.1",
-		"invalid_input_data", errors.New("invalid input data"))
+	ErrValidationError = kitty.NewError(http.StatusBadRequest, "ozvc.tr.e.1",
+		"err_invalid_input_data", errors.New("invalid input data"))
 )
