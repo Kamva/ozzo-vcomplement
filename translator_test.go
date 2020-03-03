@@ -192,7 +192,7 @@ func TestTranslateBag_IsEmpty(t *testing.T) {
 			false,
 		},
 
-		{"t3",new(TranslateBag), true},
+		{"t3", new(TranslateBag), true},
 	}
 
 	for _, test := range tests {
@@ -256,9 +256,11 @@ func TestWrapTranslationByErr(t *testing.T) {
 	}{
 		{
 			"t1", ABC{Name: "123", Age: 4},
-			ErrValidationError.SetData(map[string]interface{}{
-				"name": "abc_alpha",
-				"age":  "abc_min",
+			ErrValidationError.SetData(kitty.Map{
+				"errors": map[string]interface{}{
+					"name": "abc_alpha",
+					"age":  "abc_min",
+				},
 			}),
 		},
 		{"t3", ABC{Name: "abc", Age: 11}, nil},

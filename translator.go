@@ -82,7 +82,7 @@ func (t *kittyTranslator) WrapTranslationByError(err error) kitty.Error {
 		return nil
 	}
 
-	return ErrValidationError.SetData(bag.Map(true).(map[string]interface{}))
+	return ErrValidationError.SetData(kitty.Map{"errors": bag.Map(true).(map[string]interface{})})
 }
 
 // SetSingleMsg set single error message.
