@@ -3,8 +3,8 @@ package vcomplement
 import (
 	"github.com/BurntSushi/toml"
 	"github.com/Kamva/gutil"
-	"github.com/Kamva/kitty"
-	"github.com/Kamva/kitty/kittytranslator"
+	"github.com/Kamva/hexa"
+	"github.com/Kamva/hexa/hexatranslator"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -18,15 +18,15 @@ type ABC struct {
 	Age  int    `json:"age"`
 }
 
-func newTranslator() kitty.Translator {
+func newTranslator() hexa.Translator {
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 	gutil.Must(bundle.LoadMessageFile(gutil.SourcePath() + "/testdata/en.toml"))
-	return kittytranslator.NewI18nDriver(bundle, i18n.NewLocalizer(bundle, "en"), []string{})
+	return hexatranslator.NewI18nDriver(bundle, i18n.NewLocalizer(bundle, "en"), []string{})
 }
 
 func TestSingleFieldValidationInvalid(t *testing.T) {
-	vt := NewKittyDriverErrorTranslator(newTranslator())
+	vt := NewHexaDriverErrorTranslator(newTranslator())
 	bag := &TranslateBag{singleMessage: "abc_alpha"}
 
 	name := "123"
@@ -37,7 +37,7 @@ func TestSingleFieldValidationInvalid(t *testing.T) {
 }
 
 func TestSingleFieldValidationValid(t *testing.T) {
-	vt := NewKittyDriverErrorTranslator(newTranslator())
+	vt := NewHexaDriverErrorTranslator(newTranslator())
 
 	name := "abc"
 	res, err := vt.Translate(validation.Validate(&name, is.Alpha))
@@ -47,7 +47,7 @@ func TestSingleFieldValidationValid(t *testing.T) {
 }
 
 func TestSingleFieldValidationDefaultMessage(t *testing.T) {
-	vt := NewKittyDriverErrorTranslator(newTranslator())
+	vt := NewHexaDriverErrorTranslator(newTranslator())
 	bag := &TranslateBag{singleMessage: is.ErrURL.Message()}
 
 	name := "abc"
@@ -58,7 +58,7 @@ func TestSingleFieldValidationDefaultMessage(t *testing.T) {
 }
 
 func TestSingleFieldValidationInvalidErr(t *testing.T) {
-	vt := NewKittyDriverErrorTranslator(newTranslator())
+	vt := NewHexaDriverErrorTranslator(newTranslator())
 
 	name := "abc"
 	res, err := vt.Translate(validation.Validate(&name, validation.Min(10)))
@@ -68,7 +68,7 @@ func TestSingleFieldValidationInvalidErr(t *testing.T) {
 }
 
 func TestStructValidation(t *testing.T) {
-	vt := NewKittyDriverErrorTranslator(newTranslator())
+	vt := NewHexaDriverErrorTranslator(newTranslator())
 
 	tests := []struct {
 		tag  string
@@ -104,7 +104,7 @@ func TestStructValidation(t *testing.T) {
 	}
 }
 func TestStructValidationDefaultMessage(t *testing.T) {
-	vt := NewKittyDriverErrorTranslator(newTranslator())
+	vt := NewHexaDriverErrorTranslator(newTranslator())
 
 	tests := []struct {
 		tag  string
@@ -145,7 +145,7 @@ func TestStructValidationDefaultMessage(t *testing.T) {
 }
 
 func TestStructValidationInvalidError(t *testing.T) {
-	vt := NewKittyDriverErrorTranslator(newTranslator())
+	vt := NewHexaDriverErrorTranslator(newTranslator())
 
 	tests := []struct {
 		tag  string
@@ -201,7 +201,7 @@ func TestTranslateBag_IsEmpty(t *testing.T) {
 }
 
 func TestMapTranslatedErrors(t *testing.T) {
-	vt := NewKittyDriverErrorTranslator(newTranslator())
+	vt := NewHexaDriverErrorTranslator(newTranslator())
 
 	tests := []struct {
 		tag   string
@@ -247,16 +247,16 @@ func TestMapTranslatedErrors(t *testing.T) {
 }
 
 func TestWrapTranslationByErr(t *testing.T) {
-	vt := NewKittyDriverErrorTranslator(newTranslator())
+	vt := NewHexaDriverErrorTranslator(newTranslator())
 
 	tests := []struct {
 		tag  string
 		data ABC
-		err  kitty.Error
+		err  hexa.Error
 	}{
 		{
 			"t1", ABC{Name: "123", Age: 4},
-			ErrValidationError.SetData(kitty.Map{
+			ErrValidationError.SetData(hexa.Map{
 				"errors": map[string]interface{}{
 					"name": "abc_alpha",
 					"age":  "abc_min",

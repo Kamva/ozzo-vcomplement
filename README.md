@@ -1,7 +1,7 @@
 ### ozzo-vcomplement is complements the  ozz-validation. 
 #### Features
 -  Extra validation rules for [ozzo-validation](https://github.com/go-ozzo/ozzo-validation) package.
--  Error translator (using [kitty](github.com/Kmava/kitty) translation interface).
+-  Error translator (using [hexa](github.com/Kmava/hexa) translation interface).
 
 
 ##### Defined rules:

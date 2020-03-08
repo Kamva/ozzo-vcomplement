@@ -2,7 +2,7 @@ package vcomplement
 
 import (
 	"github.com/Kamva/gutil"
-	"github.com/Kamva/kitty"
+	"github.com/Kamva/hexa"
 	"github.com/Kamva/tracer"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
@@ -13,8 +13,8 @@ type (
 		// Translate translate validation error.
 		Translate(err error) (*TranslateBag, error)
 
-		// Wrap translated messages in a kitty Error, if err is nil, return nil.
-		WrapTranslationByError(err error) kitty.Error
+		// Wrap translated messages in a hexa Error, if err is nil, return nil.
+		WrapTranslationByError(err error) hexa.Error
 	}
 
 	// TranslateBag is the bag contains translated validation errors or error.
@@ -24,22 +24,22 @@ type (
 	}
 )
 
-type kittyTranslator struct {
-	t kitty.Translator
+type hexaTranslator struct {
+	t hexa.Translator
 }
 
-// NewKittyDriverErrorTranslator returns new instance of kittyTranslator
+// NewHexaDriverErrorTranslator returns new instance of hexaTranslator
 //that translate ozzo-validation errors.
-func NewKittyDriverErrorTranslator(t kitty.Translator) Translator {
-	return &kittyTranslator{t: t}
+func NewHexaDriverErrorTranslator(t hexa.Translator) Translator {
+	return &hexaTranslator{t: t}
 }
 
-func (t *kittyTranslator) translateErr(err validation.Error) (string, error) {
+func (t *hexaTranslator) translateErr(err validation.Error) (string, error) {
 	val, e := t.t.TranslateDefault(err.Code(), err.Message(), gutil.MapToKeyValue(err.Params())...)
 	return val, tracer.Trace(e)
 }
 
-func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
+func (t *hexaTranslator) Translate(err error) (*TranslateBag, error) {
 	bag := new(TranslateBag)
 
 	if e, ok := tracer.Cause(err).(validation.Error); ok {
@@ -68,9 +68,9 @@ func (t *kittyTranslator) Translate(err error) (*TranslateBag, error) {
 	return bag, err
 }
 
-// Wrap bag translated error messages to kitty Error.
+// Wrap bag translated error messages to hexa Error.
 // if bag be empty, returns nil.
-func (t *kittyTranslator) WrapTranslationByError(err error) kitty.Error {
+func (t *hexaTranslator) WrapTranslationByError(err error) hexa.Error {
 	bag, err := t.Translate(err)
 
 	if err != nil {
@@ -82,7 +82,7 @@ func (t *kittyTranslator) WrapTranslationByError(err error) kitty.Error {
 		return nil
 	}
 
-	return ErrValidationError.SetData(kitty.Map{"errors": bag.Map(true).(map[string]interface{})})
+	return ErrValidationError.SetData(hexa.Map{"errors": bag.Map(true).(map[string]interface{})})
 }
 
 // SetSingleMsg set single error message.
@@ -131,25 +131,25 @@ func (t *TranslateBag) Map(forceMap bool) interface{} {
 	return messages
 }
 
-// TValidate get a translator and validatable interface, validate and return kitty error.
+// TValidate get a translator and validatable interface, validate and return hexa error.
 func TValidateErr(t Translator, err error) error {
 	return t.WrapTranslationByError(err)
 }
 
-// TValidate get a translator and validatable interface, validate and return kitty error.
+// TValidate get a translator and validatable interface, validate and return hexa error.
 func TValidate(t Translator, v validation.Validatable) error {
 	return TValidateErr(t, v.Validate())
 }
 
-// TValidateBy validate by provided translator and check to detect right driver.
-func TValidateByKitty(t kitty.Translator, v validation.Validatable) error {
-	return TValidate(NewKittyDriverErrorTranslator(t.(kitty.Translator)), v)
+// TValidateByHexa validate by provided translator and check to detect right driver.
+func TValidateByHexa(t hexa.Translator, v validation.Validatable) error {
+	return TValidate(NewHexaDriverErrorTranslator(t.(hexa.Translator)), v)
 }
 
-// TValidateBy validate by provided translator and check to detect right driver.
-func TranslateByKitty(t kitty.Translator, err error) error {
-	return TValidateErr(NewKittyDriverErrorTranslator(t.(kitty.Translator)), err)
+// TranslateByHexa validate by provided translator and check to detect right driver.
+func TranslateByHexa(t hexa.Translator, err error) error {
+	return TValidateErr(NewHexaDriverErrorTranslator(t.(hexa.Translator)), err)
 }
 
-// Assert kittyTranslator implements the Translator.
-var _ Translator = &kittyTranslator{}
+// Assert hexaTranslator implements the Translator.
+var _ Translator = &hexaTranslator{}
