@@ -6,7 +6,7 @@ import (
 )
 
 //--------------------------------
-// Iran Phone number.
+// Iran telephone number.
 //--------------------------------
 
 // ErrIRTelInvalid is the default IRTelephone validation rules error.
