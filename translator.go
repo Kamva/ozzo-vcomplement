@@ -42,13 +42,13 @@ func (t *hexaTranslator) translateErr(err validation.Error) (string, error) {
 func (t *hexaTranslator) Translate(err error) (*TranslateBag, error) {
 	bag := new(TranslateBag)
 
-	if e, ok := tracer.Cause(err).(validation.Error); ok {
+	if e, ok := gutil.CauseErr(err).(validation.Error); ok {
 		msg, err := t.translateErr(e)
 		bag.SetSingleMsg(msg)
 		return bag, tracer.Trace(err)
 	}
 
-	if es, ok := tracer.Cause(err).(validation.Errors); ok {
+	if es, ok := gutil.CauseErr(err).(validation.Errors); ok {
 		for k, e := range es {
 			errBag, err := t.Translate(e)
 
