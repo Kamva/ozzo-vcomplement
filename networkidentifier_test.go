@@ -14,3 +14,11 @@ func TestSocialNetwork(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestSocialNetworkInvalid(t *testing.T) {
+	social := "1my-account"
+
+	err := validation.Validate(&social, SocialNetworkIdentifier)
+
+	assert.Equal(t,ErrSocialNetworkIdentifierInvalid,err)
+}
+
