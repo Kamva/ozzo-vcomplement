@@ -16,17 +16,17 @@ func TestIRPostalCode(t *testing.T) {
 }
 
 func TestIRPostalCodeInvalid(t *testing.T) {
-	social := "563798372"
+	p := "563798372"
 
-	err := validation.Validate(&social, IRPostalCode)
+	err := validation.Validate(&p, IRPostalCode)
 
 	assert.Equal(t,ErrIRPostalCodeInvalid,err)
 }
 
 func TestIRPostalCodeInvalidWithAlpha(t *testing.T) {
-	social := "abc4567890"
+	p := "abc4567890"
 
-	err := validation.Validate(&social, IRPostalCode)
+	err := validation.Validate(&p, IRPostalCode)
 
 	assert.Equal(t,ErrIRPostalCodeInvalid,err)
 }
