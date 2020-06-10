@@ -13,4 +13,4 @@ import (
 var ErrMoneyInvalid = validation.NewError("validation_money_invalid", "Money value is invalid")
 
 // Money is the money validation rule. values should be positive decimals values.
-var Money = validation.Match(regexp.MustCompile("^(0|[1-9]\\d*)?(\\.\\d+)?I$")).ErrorObject(ErrMoneyInvalid)
+var Money = validation.Match(regexp.MustCompile("^(0|[1-9]\\d*)?(\\.\\d+)?$")).ErrorObject(ErrMoneyInvalid)
