@@ -1,9 +1,9 @@
 package vcomplement
 
 import (
-	"github.com/Kamva/gutil"
-	"github.com/Kamva/hexa"
-	"github.com/Kamva/tracer"
+	"github.com/kamva/gutil"
+	"github.com/kamva/hexa"
+	"github.com/kamva/tracer"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 

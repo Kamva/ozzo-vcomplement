@@ -2,9 +2,9 @@ package vcomplement
 
 import (
 	"github.com/BurntSushi/toml"
-	"github.com/Kamva/gutil"
-	"github.com/Kamva/hexa"
-	"github.com/Kamva/hexa/hexatranslator"
+	"github.com/kamva/gutil"
+	"github.com/kamva/hexa"
+	"github.com/kamva/hexa/hexatranslator"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
