@@ -17,9 +17,15 @@ import (
 // 00 = error number zero (id of code in that part and type)
 
 var (
-	ErrInternalValidation = hexa.NewError(http.StatusInternalServerError, "ozvc.tr.e.0",
-		hexa.ErrKeyInternalError, errors.New("internal error"))
+	ErrInternalValidation = hexa.NewError(
+		http.StatusInternalServerError,
+		"lib.translation.internal_error",
+		errors.New("internal error"),
+	)
 
-	ErrValidationError = hexa.NewError(http.StatusBadRequest, "ozvc.tr.e.1",
-		"err_invalid_input_data", errors.New("invalid input data"))
+	ErrValidationError = hexa.NewError(
+		http.StatusBadRequest,
+		"lib.translation.invalid_input_data_error",
+		errors.New("invalid input data"),
+	)
 )
