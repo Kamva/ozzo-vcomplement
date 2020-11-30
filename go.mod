@@ -7,8 +7,8 @@ require (
 	github.com/Kamva/mgm/v3 v3.0.0 // indirect
 	github.com/go-ozzo/ozzo-validation/v4 v4.1.0
 	github.com/kamva/gutil v0.0.0-20200802192905-f876666b3671
-	github.com/kamva/hexa v0.0.0-20201115033432-5c9e77b6bdff
-	github.com/kamva/tracer v0.0.0-20201115121238-86967fb5555a
+	github.com/kamva/hexa v0.0.0-20201130114658-d62fdb8a5040
+	github.com/kamva/tracer v0.0.0-20201115122932-ea39052d56cd
 	github.com/mattn/go-colorable v0.1.4 // indirect
 	github.com/mattn/go-isatty v0.0.11 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.0.3
