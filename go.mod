@@ -4,7 +4,6 @@ go 1.13
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/Kamva/mgm/v3 v3.0.0 // indirect
 	github.com/go-ozzo/ozzo-validation/v4 v4.1.0
 	github.com/kamva/gutil v0.0.0-20200802192905-f876666b3671
 	github.com/kamva/hexa v0.0.0-20201130114658-d62fdb8a5040
