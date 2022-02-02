@@ -1,8 +1,9 @@
 package vcomplement
 
 import (
-	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"regexp"
+
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 //--------------------------------
@@ -12,9 +13,15 @@ import (
 // ErrIRPhoneInvalid is the default IRPhone validation rules error.
 var ErrIRPhoneInvalid = validation.NewError("validation_ir_phone_invalid", "Iran phone number is invalid")
 
+var (
+	IRPhoneRegex   = regexp.MustCompile("^(\\+98|0)9\\d{9}$")
+	IRPhone98Regex = regexp.MustCompile("^\\+989\\d{9}$")
+	IRPhone0Regex  = regexp.MustCompile("^09\\d{9}$")
+)
+
 // IRPhone is the iran phone number validation rule.
-var(
-	IRPhone = validation.Match(regexp.MustCompile("^(\\+98|0)9\\d{9}$")).ErrorObject(ErrIRPhoneInvalid)
-	IRPhone98 = validation.Match(regexp.MustCompile("^\\+989\\d{9}$")).ErrorObject(ErrIRPhoneInvalid)
-	IRPhone0 = validation.Match(regexp.MustCompile("^09\\d{9}$")).ErrorObject(ErrIRPhoneInvalid)
+var (
+	IRPhone   = validation.Match(IRPhoneRegex).ErrorObject(ErrIRPhoneInvalid)
+	IRPhone98 = validation.Match(IRPhone98Regex).ErrorObject(ErrIRPhoneInvalid)
+	IRPhone0  = validation.Match(IRPhone0Regex).ErrorObject(ErrIRPhoneInvalid)
 )
