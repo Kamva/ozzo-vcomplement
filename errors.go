@@ -2,8 +2,9 @@ package vcomplement
 
 import (
 	"errors"
-	"github.com/kamva/hexa"
 	"net/http"
+
+	"github.com/kamva/hexa"
 )
 
 //--------------------------------
@@ -20,12 +21,10 @@ var (
 	ErrInternalValidation = hexa.NewError(
 		http.StatusInternalServerError,
 		"lib.translation.internal_error",
-		errors.New("internal error"),
-	)
+	).SetError(errors.New("internal error"))
 
 	ErrValidationError = hexa.NewError(
 		http.StatusBadRequest,
 		"lib.translation.invalid_input_data_error",
-		errors.New("invalid input data"),
-	)
+	).SetError(errors.New("invalid input data"))
 )
